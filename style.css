@@ -17,22 +17,42 @@ body {
     box-shadow: 0.222rem 0.322 0.5rem rgba(0,0,0,0.34);
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 
 }
 
 .screen {
     width: 100%;
     height: 80px;
-    border: 1px solid lightgreen;
+    border: 2px solid lightgreen;
     border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 7px;
+    gap: 12px;
+
 
 }
+
+.operation, .result {
+    font-size: 1.23rem;
+    font-weight: 500;
+}
+
 
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
+    grid-template-areas: 
+        "a a c d"
+        "e f g h"
+        "i j k l"
+        "m n o p"
+        "q r s s";
+    ;
 }
 
 .btn {
@@ -40,5 +60,77 @@ body {
     padding: 20px;
     background-color:antiquewhite;
     border-radius: 4px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;    
+}
+
+.btn:hover {
+    box-shadow: 0rem 0rem .26rem rgba(225, 225, 225, .73);
+}
+
+.clear {
+    grid-area: a;
+    background-color: crimson;
+}
+
+.mutiply {
+    grid-area: h;
+}
+
+.addition {
+    grid-area: l;
+}
+
+.subtract {
+    grid-area: p;
+}
+
+.nine {
+    grid-area: e;
+}
+
+.eight {
+    grid-area: f;
+}
+
+.seven {
+    grid-area: g;
     
+}
+
+.six {
+    grid-area: i;
+}
+
+.five {
+    grid-area: j;
+}
+
+.four {
+    grid-area: k;
+}
+
+.three {
+    grid-area: m;
+}
+
+.two {
+    grid-area: n;
+}
+
+.one {
+    grid-area: o;
+}
+
+.zero {
+    grid-area: r;
+}
+
+.decimal {
+    grid-area: q;
+}
+.equal {
+    grid-area: s;
+    background-color: green;
 }
