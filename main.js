@@ -11,7 +11,8 @@ let result = ""
 let number = ""
 let number2 = ""
 let screen_operation = ""
-let operator = ""
+let operator = " "
+screen_result.textContent = 0
 
 numbers.forEach(num => {
     num.addEventListener("click", setNumber)
@@ -24,23 +25,42 @@ operators.forEach(op => {
 decimal.addEventListener("click", setDecimal)
 
 equal.addEventListener('click', () => {
-    console.log(screen_operation,"operator ", operator, "number2 ", number2)
+    
     if(result || (number && operator && number2)) {
-        calculate_operation()
+        console.log(number2)
+        screen_result.textContent = result
         number = result
         number2 = ""
     }
 })
 
+del.addEventListener("click", () => {
+    console.log(result)
+    let str_result = String(result)
+    let new_result = str_result.replace(str_result.charAt(str_result.length - 1), " ").trimEnd()
+    console.log(new_result)
+})
+
+
+
+//////////////////////////////////////////////////functions //////////////////
+
 function setNumber(e){
+    
     if(screen_operation.length > 1 && screen_operation.includes(operator)) {
+        let kept_value = screen_operation.substring(0, screen_operation.lastIndexOf(operator) + 1)
+        
         number2 += e.currentTarget.textContent.trim()
-        screen_operation += " " + number2
+        screen_operation = kept_value +  " " + number2
         set_Operation_onscreen()
+        screen_result.textContent = result
+        
     } else {
         number += e.currentTarget.textContent.trim()
         screen_operation = number
         set_Operation_onscreen()
+        result = number
+        screen_result.textContent = Number(number)
     }
     
     
@@ -69,7 +89,8 @@ function setOperator(e) {
             calculate_operation()
             number = result
             operator = e.currentTarget.textContent.trim()
-            screen_operation += " " + operator 
+            screen_operation = ""
+            screen_operation = number + " " + operator 
             set_Operation_onscreen()
             number2 = ""
             
@@ -104,9 +125,10 @@ function calculate_operation() {
                 result = add(Number(number), Number(number2) )
         }
 
-        screen_result.textContent = result
     }
 }
+
+
 
 // const btns = document.querySelectorAll('.btn');
 // const operation = document.querySelector('.operation')
