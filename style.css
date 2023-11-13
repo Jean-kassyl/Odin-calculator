@@ -23,11 +23,11 @@ body {
 
 .screen {
     width: 100%;
-    height: 80px;
+    height: 60px;
     border: 2px solid lightgreen;
     border-radius: 3px;
     display: flex;
-    flex-direction: column;
+   
     justify-content: flex-end;
     align-items: flex-end;
     padding: 7px;
@@ -36,9 +36,9 @@ body {
 
 }
 
-.operation, .result {
-    font-size: 1.23rem;
-    font-weight: 500;
+.result {
+    font-size: 2rem;
+    font-weight: 600;
 }
 
 
@@ -51,7 +51,7 @@ body {
         "e f g h"
         "i j k l"
         "m n o p"
-        "q r s s";
+        "q r s t";
     ;
 }
 
@@ -130,7 +130,10 @@ body {
 .decimal {
     grid-area: q;
 }
-.equal {
+.negate {
     grid-area: s;
+}
+.equal {
+    grid-area: t;
     background-color: green;
 }

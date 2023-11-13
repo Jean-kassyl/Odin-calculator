@@ -4,14 +4,14 @@ const equal = document.querySelector(".equal")
 const decimal = document.querySelector(".decimal")
 const clear = document.querySelector(".clear")
 const del = document.querySelector(".delete")
-const operation = document.querySelector(".operation")
+
 const screen_result = document.querySelector(".result")
 
+const negate = document.querySelector(".negate")
 let result = ""
 let number = ""
 let number2 = ""
-let screen_operation = ""
-let operator = " "
+let operator = ""
 screen_result.textContent = 0
 
 numbers.forEach(num => {
@@ -25,88 +25,105 @@ operators.forEach(op => {
 decimal.addEventListener("click", setDecimal)
 
 equal.addEventListener('click', () => {
-    
-    if(result || (number && operator && number2)) {
-        console.log(number2)
-        screen_result.textContent = result
-        number = result
-        number2 = ""
-    }
+    calculate_operation()
+    screen_result.textContent = result
+    number = result
+    number2 = ""
+    operator =""
 })
 
 del.addEventListener("click", () => {
-    console.log(result)
     let str_result = String(result)
     let new_result = str_result.replace(str_result.charAt(str_result.length - 1), " ").trimEnd()
-    console.log(new_result)
+    result = Number(new_result)
+    screen_result.textContent = result
+    check_current_number()
 })
 
+clear.addEventListener("click", () => {
+    result = "0"
+    screen_result.textContent = result
+    number = ""
+    number2 = ""
+    operator = ""
+})
+
+negate.addEventListener("click", () => {
+    result = result * -1
+    screen_result.textContent = result
+    if(operator){
+        number2 = result
+    }
+    else {
+        number = result
+    }
+})
 
 
 //////////////////////////////////////////////////functions //////////////////
 
 function setNumber(e){
-    
-    if(screen_operation.length > 1 && screen_operation.includes(operator)) {
-        let kept_value = screen_operation.substring(0, screen_operation.lastIndexOf(operator) + 1)
+    if(number && operator ) {
         
-        number2 += e.currentTarget.textContent.trim()
-        screen_operation = kept_value +  " " + number2
-        set_Operation_onscreen()
+        if (number2.length < 15){
+            number2 += e.currentTarget.textContent.trim()
+        }  
+        result = number2
         screen_result.textContent = result
+        console.log("number 2", number2)
         
     } else {
-        number += e.currentTarget.textContent.trim()
-        screen_operation = number
-        set_Operation_onscreen()
+        if (number.length < 15){
+            number += e.currentTarget.textContent.trim()
+        }  
+        console.log(number)
         result = number
-        screen_result.textContent = Number(number)
+        screen_result.textContent = result
+      
     }
     
     
 }
 
 function setDecimal() {
-    if(number.includes('.') || !number.includes('.') && number.length < 1) {
-        number = number
+    if(result.includes('.') || !result.includes('.') && result.length < 1) {
+        result = result
     } else {
-        number += "."
+        result += "."
+        screen_result.textContent = result
+        check_current_number()
+       
     }
-    screen_operation = number
-    set_Operation_onscreen()
+   
 }
 
 
-function set_Operation_onscreen() {
-    operation.textContent = screen_operation
+function check_current_number() {
+    if (operator){
+        number2 = result == "0" ? "": result
+    }else {
+        number = result == "0" ? "": result
+    }
 }
+
 
 function setOperator(e) {
-    if(screen_operation.length < 1){
-        operator = ""
-    } else if (screen_operation.includes('+') || screen_operation.includes('-') || screen_operation.includes('×') || screen_operation.includes('÷') ) {
-        if(operation.textContent.includes(number2)) {
+    if(result){
+        if (!operator){
+            operator = e.currentTarget.textContent.trim()
+            console.log("operator ", operator)
+        }else if(operator && number2){
+            
             calculate_operation()
+            screen_result.textContent = result
             number = result
             operator = e.currentTarget.textContent.trim()
-            screen_operation = ""
-            screen_operation = number + " " + operator 
-            set_Operation_onscreen()
             number2 = ""
-            
-        } else if(result) {
-            operator = e.currentTarget.textContent.trim()
-            screen_operation += " " + operator 
-            set_Operation_onscreen()
-        } else {
-            operator = ""
-        }
-    } else {
-        operator = e.currentTarget.textContent.trim()
-        screen_operation += " " + operator 
-        set_Operation_onscreen()
-    }
     
+        }
+    } 
+   
+   
 }
 
 function calculate_operation() {
@@ -116,7 +133,11 @@ function calculate_operation() {
                 result = multiply(Number(number), Number(number2) )
                 break
             case '÷':
+               if(Number(number2) != 0){
                 result = divide(Number(number), Number(number2 ) )
+               } else {
+                result = "lmao"
+               }
                 break
             case '-':
                 result = substract(Number(number), Number(number2) )
@@ -129,108 +150,39 @@ function calculate_operation() {
 }
 
 
+////////////////////////////operation////////////////////////////////////////
 
-// const btns = document.querySelectorAll('.btn');
-// const operation = document.querySelector('.operation')
-// const result = document.querySelector('.result')
-
-// let number = ""
-// let operator = ""
-// let number1 = ""
-// let op = ''
-
-
-
-
-
-// btns.forEach(btn => {
-//     btn.addEventListener("click", operate)
-// })
-
-// function operate(e){
-    
-//     getArguments(e)
-//     if(!number1 ){
-//         operation.textContent = number
-//     } else if (number1 && !e.currentTarget.classList.contains("equal")){
-//         operation.textContent = ''
-//         operation.textContent += number1 + " " + op  +" " + number
-//     }
-//     console.log(number)
-//     if (operator) {
-//         console.log(operator)
-//         number1 = number
-//         number = ""
-//         operation.textContent += " " + operator
-//         op = operator
-//         operator = ""
-//     }
-//     if (e.currentTarget.classList.contains("equal") ) {
-        
-//         if (number1 && op && number){
-            // switch(op){
-            //     case '×':
-            //         result.textContent = multiply(number1, number)
-            //         break
-            //     case '÷':
-            //         result.textContent = divide(number1, number)
-            //         break
-            //     case '-':
-            //         result.textContent = substract(number1, number)
-            //         break
-            //     default:
-            //         result.textContent = add(number1, number)
-            // }
-//         }
-//     }
-// }
-
-// function getArguments(e){
-//     let currentBtn = e.currentTarget
-    
-//     if (currentBtn.classList.contains("clear")){
-//         console.log("clearing the screen")
-//     } else if (currentBtn.classList.contains("C")){
-//         console.log("deleting numbers")
-//     } else if(currentBtn.classList.contains("multiply")){
-//         operator = '×'
-//         return 
-//     } else if(currentBtn.classList.contains("division")){
-//         operator = '÷'
-//         return
-//     } else if(currentBtn.classList.contains("addition")){
-//         operator = '+'
-//         return
-//     } else if(currentBtn.classList.contains("subtract")){
-//         operator = '-'
-//         return
-//     } else if(currentBtn.classList.contains("equal")){
-//         return
-//     }
-//     else {
-//         if(number.includes('.') && currentBtn.textContent.trim() == '.'){
-//             number = number
-//         } else {
-//              number += currentBtn.textContent.trim()
-//         }
-
-        
-//     }
-   
-// }
 
 function multiply(a,b){
-    return a * b
+    let r = a * b
+    if (String(r).length > 10){
+        return r.toExponential(3)
+    }
+    return r
 }
 
 function divide(a,b){
-    return a / b
+    let r = a / b
+    if (String(r).length > 10){
+        return r.toFixed(7)
+    }
+    return r
 }
 
+
+
 function substract(a,b){
-    return a - b
+    let r = a - b
+    if (String(r).length > 10){
+        return r.toExponential(3)
+    }
+    return r
 }
 
 function add(a,b){
-    return a + b
+    let r = a + b
+    if (String(r).length > 10){
+        return r.toExponential(3)
+    }
+    return r
 }
